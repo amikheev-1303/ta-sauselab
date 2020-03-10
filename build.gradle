@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+repositories {
+    mavenCentral()
+    maven {
+        url "https://mvn.trueautomation.io/artifactory/trueautomation"
+    }
+}
+dependencies {
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+    implementation group: 'org.testng', name: 'testng', version: '7.1.0'
+    implementation group: 'io.trueautomation', name: 'trueautomation-client', version: '0.3.8'
+}
+
+wrapper {
+    gradleVersion = '5.6.2'
+}
+
+
+
+test{
+    useTestNG() {
+        suites '/src/test/resources/test-run.xml'
+    }
+
+}
+
+
