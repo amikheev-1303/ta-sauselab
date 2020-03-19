@@ -1,20 +1,35 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.8.1'
 }
-group 'org.example'
-version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
 repositories {
     mavenCentral()
+    jcenter()
     maven {
         url "https://mvn.trueautomation.io/artifactory/trueautomation"
     }
 }
+
+allure {
+    autoconfigure = false
+    allureJavaVersion = "11"
+    aspectjweaver = true
+    configuration = "implementation"
+    resultsDir = file('build/allure-results')
+    reportDir = file('build/allure-report')
+    version = '2.9.0'
+    downloadLinkFormat = 'https://dl.bintray.com/qameta/maven/io/qameta/allure/allure-commandline/%s/allure-commandline-%<s.zip'
+    useTestNG {
+        version = "2.9.0"
+    }
+}
+
+
 dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
-    implementation group: 'org.testng', name: 'testng', version: '7.1.0'
-    implementation group: 'io.trueautomation', name: 'trueautomation-client', version: '0.3.8'
+    implementation group: 'org.testng', name: 'testng', version: '6.14.3'
+    compile group: 'io.trueautomation', name: 'trueautomation-client', version: '0.3.9'
 }
 
 wrapper {
@@ -25,7 +40,7 @@ wrapper {
 
 test{
     useTestNG() {
-        suites '/src/test/resources/test-run.xml'
+        suites 'src/test/resources/test-run.xml'
     }
 
 }

@@ -1,42 +1,42 @@
-import org.openqa.selenium.By;
+import io.trueautomation.client.driver.TrueAutomationDriver;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pages.MainPage;
 
 import java.net.MalformedURLException;
-
-import static io.trueautomation.client.TrueAutomationHelper.ta;
+import java.net.URL;
 
 public class BaseTest {
 
     private WebDriver driver;
-    private By loginBtn = By.xpath(ta("ta:mainPage:loginBtn", "//*[@class='jet-button__label' and text()='Login']"));
-    private By goBtn = By.xpath(ta("ta:mainPage:goBtn", "//*[@class='jet-button__label' and text()='Go']"));
-    private By signupBtn = By.cssSelector(ta("ta:mainPage:signupBtn", "div.sign-up-container > a"));
-    private By emailFl = By.name(ta("ta:loginPage:email", "email"));
-
-    @BeforeClass
-    public void beforeTest() throws MalformedURLException {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.setCapability("browserVersion", "80");
-        System.setProperty("webdriver.chrome.driver", "/Users/alexeymikheev/chromedriver");
-        driver = new ChromeDriver(chromeOptions);
-    }
 
     @Test
     public void exampleTest() {
-        driver.get("https://trueautomation.io");
+        new MainPage(driver)
+                .open()
+                .goesToLoginPage()
+                .opensSignUpForm()
+                .entersEmail("your@mail.com");
 
-        Actions actions = new Actions(driver);
-        actions.moveToElement(driver.findElement(loginBtn)).perform();
-        driver.findElement(goBtn).click();
-        driver.findElement(signupBtn).click();
+    }
 
-        driver.findElement(emailFl).sendKeys("your@mail.com");
+    @BeforeClass
+    public void beforeTest() throws MalformedURLException {
+        MutableCapabilities sauceOptions = new MutableCapabilities();
+        sauceOptions.setCapability("screenResolution", "2360x1770");
+
+        ChromeOptions browserOptions = new ChromeOptions();
+        browserOptions.setExperimentalOption("w3c", true);
+        browserOptions.setCapability("platformName", "macOS 10.15");
+        browserOptions.setCapability("browserVersion", "80.0");
+        browserOptions.setCapability("sauce:options", sauceOptions);
+        //driver = new RemoteWebDriver(new URL(""), browserOptions);
+        driver = new TrueAutomationDriver(new URL(""), browserOptions);
+
     }
 
     @AfterClass
